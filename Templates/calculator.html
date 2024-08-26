@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <center><title>Kalkulator</title></center>
+    <style>
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 200px;
+            margin: auto;
+        }
+
+        .calculator input {
+            grid-column: span 4;
+            height: 40px;
+            font-size: 20px;
+            text-align: right;
+        }
+
+        .calculator button {
+            height: 40px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1><center>Kalkulator</center></h1>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="setOperation('/')">/</button>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="setOperation('*')">*</button>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="setOperation('-')">-</button>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="setOperation('+')">+</button>
+    </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+    <center><button onclick="window.history.back()">Finish</button></center>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = '';
+        let operation = '';
+        let previousInput = '';
+
+        function appendToDisplay(value) {
+            currentInput += value;
+            display.value = currentInput;
+        }
+
+        function setOperation(op) {
+            if (currentInput === '') return; // Zatrzymaj, jeśli nie ma bieżącego wejścia
+            if (previousInput !== '') {
+                calculate(); // Jeśli jest wcześniejsze wejście, oblicz to przed ustawieniem nowej operacji
+            }
+            operation = op;
+            previousInput = currentInput;
+            currentInput = '';
+            display.value = ''; // Wyczyść wyświetlacz po ustawieniu operacji
+        }
+
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            if (isNaN(prev) || isNaN(current)) return; // Sprawdź, czy wejście jest liczbą
+
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            currentInput = result.toString();
+            operation = '';
+            previousInput = '';
+            display.value = currentInput; // Pokaż wynik
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            previousInput = '';
+            operation = '';
+            display.value = '';
+        }
+    </script>
+</body>
+</html>

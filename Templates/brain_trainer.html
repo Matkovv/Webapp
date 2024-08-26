@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Brain Trainer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            position: relative;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .dot {
+            position: absolute;
+            background-color: black;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: none;
+            top: calc(50% - 10px);
+            left: calc(50% - 10px);
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        #colorsContainer {
+            display: flex;
+            width: 240px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Brain Trainer</h1>
+    <div id="colorsContainer">
+        <div class="color-box" style="background-color: red;">
+            <div class="dot"></div>
+        </div>
+        <div class="color-box" style="background-color: green;">
+            <div class="dot"></div>
+        </div>
+        <div class="color-box" style="background-color: blue;">
+            <div class="dot"></div>
+        </div>
+        <div class="color-box" style="background-color: yellow;">
+            <div class="dot"></div>
+        </div>
+    </div>
+    <button id="startGame">Start Game</button>
+    <div id="message"></div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button onclick="window.history.back()">Finish</button>
+
+    <script>
+        // Kolory do gry
+        let sequence = [];
+        let userInput = [];
+        const maxSequenceLength = 4; // Maksymalna długość sekwencji
+        const colorBoxes = document.querySelectorAll('.color-box');
+
+        // Obsługuje kliknięcie przycisku "Start Game"
+        document.getElementById('startGame').onclick = startGame;
+
+        function startGame() {
+            sequence = [];
+            nextSequence();
+        }
+
+        function nextSequence() {
+            // Generujemy sekwencję kolorów
+            sequence = [];
+            for (let i = 0; i < maxSequenceLength; i++) {
+                const randomIndex = Math.floor(Math.random() * colorBoxes.length);
+                sequence.push(randomIndex);
+            }
+            showSequence();
+        }
+
+        function showSequence() {
+            let index = 0;
+            document.getElementById('message').innerText = 'Obserwuj kolory!';
+
+            function displayColor() {
+                if (index < sequence.length) {
+                    const colorBox = colorBoxes[sequence[index]];
+                    const dot = colorBox.querySelector('.dot');
+                    dot.style.display = 'block';
+                    colorBox.style.opacity = 1;
+
+                    setTimeout(() => {
+                        dot.style.display = 'none';
+                        colorBox.style.opacity = 0.5;
+                    }, 500);
+
+                    setTimeout(() => {
+                        index++;
+                        displayColor();
+                    }, 1000);
+                } else {
+                    document.getElementById('message').innerText = 'Teraz twoja kolej!';
+                }
+            }
+
+            displayColor();
+        }
+
+        // Obsługuje kliknięcia na kolorach
+        colorBoxes.forEach((colorBox, index) => {
+            colorBox.onclick = () => handleUserClick(index);
+        });
+
+        function handleUserClick(colorIndex) {
+            // Pokazuje popup z komunikatem
+            alert('Something go wrong... Reaper is coming...');
+        }
+    </script>
+</body>
+</html>

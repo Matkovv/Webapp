@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoja Lokalizacja</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #map {
+            height: 400px; /* Wysokość mapy */
+            width: 100%; /* Szerokość mapy */
+        }
+        #info {
+            margin: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Twoja lokalizacja</h1>
+    <div id="info">
+        <p>Adres IP: {{ ip_info.ip }}</p>
+        <p>Miasto: {{ ip_info.city }}</p>
+        <p>Kraj: {{ ip_info.country_name }}</p>
+    </div>
+    <div id="map"></div>
+    <br>
+    <br>
+    <button onclick="window.history.back();">Finish</button>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Tworzenie mapy przy użyciu Leaflet
+        var map = L.map('map').setView([{{ ip_info.latitude }}, {{ ip_info.longitude }}], 13); // Ustawienie widoku na współrzędne IP
+
+        // Dodawanie warstwy mapy
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Dodanie znacznika w aktualnej lokalizacji
+        L.marker([{{ ip_info.latitude }}, {{ ip_info.longitude }}]).addTo(map)
+            .bindPopup('Twoja lokalizacja: ' + '{{ ip_info.city }}')
+            .openPopup();
+    </script>
+</body>
+</html>
